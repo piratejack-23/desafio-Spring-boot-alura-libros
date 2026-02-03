@@ -1,6 +1,7 @@
 package com.libros.desafioAlura.model;
 
 
+import com.libros.desafioAlura.dto.AutorDTO;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -14,10 +15,20 @@ public class Autor {
     private Long id;
     @Column(unique = true)
     private String nombre;
-    private String diaNacimiento;
-    private String diaMuerte;
-    @OneToMany(mappedBy = "autor")
+    private Integer diaNacimiento;
+    private Integer diaMuerte;
+    @OneToMany(mappedBy = "autor",cascade = CascadeType.ALL)
     private List<Libro> libros;
+
+    public Autor() {
+    }
+
+    public Autor(AutorDTO autorDTO) {
+        this.nombre = autorDTO.nombre();
+        this.diaNacimiento = autorDTO.diaNacimiento();
+        this.diaMuerte= autorDTO.diaMuerte();
+    }
+
 
     public List<Libro> getLibros() {
         return libros;
@@ -43,19 +54,29 @@ public class Autor {
         this.nombre = nombre;
     }
 
-    public String getDiaNacimiento() {
+    public Integer getDiaNacimiento() {
         return diaNacimiento;
     }
 
-    public void setDiaNacimiento(String diaNacimiento) {
+    public void setDiaNacimiento(Integer diaNacimiento) {
         this.diaNacimiento = diaNacimiento;
     }
 
-    public String getDiaMuerte() {
+    public Integer getDiaMuerte() {
         return diaMuerte;
     }
 
-    public void setDiaMuerte(String diaMuerte) {
+    public void setDiaMuerte(Integer diaMuerte) {
         this.diaMuerte = diaMuerte;
+    }
+
+    @Override
+    public String toString() {
+        return
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", diaNacimiento=" + diaNacimiento +
+                ", diaMuerte=" + diaMuerte +
+                ", libros=" + libros;
     }
 }

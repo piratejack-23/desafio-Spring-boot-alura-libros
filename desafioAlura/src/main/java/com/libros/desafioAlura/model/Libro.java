@@ -1,6 +1,7 @@
 package com.libros.desafioAlura.model;
 
 
+import com.libros.desafioAlura.dto.LibroDTO;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -14,13 +15,33 @@ public class Libro {
     private Long id;
     @Column(unique = true)
     private String titulo;
-    private String idiomas;
+    private List<String> idiomas;
     private List<String> tematicas;
     private List<String> categorias;
-    private int numeroDescargas;
+    private Integer numeroDescargas;
     @ManyToOne
     @JoinColumn(name = "autor_id")
     private Autor autor;
+
+    public Libro() {
+    }
+
+    public Libro(LibroDTO libroDTO) {
+       this.titulo = libroDTO.titulo();
+       this.idiomas = libroDTO.idiomas();
+       this.tematicas =libroDTO.tematicas();
+       this.categorias= libroDTO.categorias();
+       this.numeroDescargas = libroDTO.numeroDescargas();
+
+    }
+
+    public List<String> getIdiomas() {
+        return idiomas;
+    }
+
+    public void setIdiomas(List<String> idiomas) {
+        this.idiomas = idiomas;
+    }
 
     public Long getId() {
         return id;
@@ -37,15 +58,6 @@ public class Libro {
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
-
-    public String getIdiomas() {
-        return idiomas;
-    }
-
-    public void setIdiomas(String idiomas) {
-        this.idiomas = idiomas;
-    }
-
     public List<String> getTematicas() {
         return tematicas;
     }
@@ -62,11 +74,11 @@ public class Libro {
         this.categorias = categorias;
     }
 
-    public int getNumeroDescargas() {
+    public Integer getNumeroDescargas() {
         return numeroDescargas;
     }
 
-    public void setNumeroDescargas(int numeroDescargas) {
+    public void setNumeroDescargas(Integer numeroDescargas) {
         this.numeroDescargas = numeroDescargas;
     }
 
@@ -76,5 +88,17 @@ public class Libro {
 
     public void setAutor(Autor autor) {
         this.autor = autor;
+    }
+
+    @Override
+    public String toString() {
+        return
+                "id=" + id +
+                ", titulo='" + titulo +
+                ", idiomas=" + idiomas +
+                ", tematicas=" + tematicas +
+                ", categorias=" + categorias +
+                ", numeroDescargas=" + numeroDescargas +
+                ", autor=" + autor ;
     }
 }
