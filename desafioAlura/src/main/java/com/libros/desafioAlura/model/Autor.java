@@ -17,7 +17,7 @@ public class Autor {
     private String nombre;
     private Integer diaNacimiento;
     private Integer diaMuerte;
-    @OneToMany(mappedBy = "autor",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "autor",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Libro> libros;
 
     public Autor() {
@@ -72,11 +72,22 @@ public class Autor {
 
     @Override
     public String toString() {
-        return
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                ", diaNacimiento=" + diaNacimiento +
-                ", diaMuerte=" + diaMuerte +
-                ", libros=" + libros;
+        String librosString = "";
+
+        if (libros != null && !libros.isEmpty()) {
+            for (Libro libro : libros) {
+                librosString += "  • " + libro.getTitulo() + "\n";
+            }
+        }
+        return String.format("""
+        Autor
+        ━━━━━━━━━━━━━━━━━━━━━━
+        ID: %d
+        Nombre: %s
+        Nacimiento: %s
+        Fallecimiento: %s
+        
+        %s
+        """, id, nombre, diaNacimiento != null ? diaNacimiento : "Desconocido", diaMuerte != null ? diaMuerte : "Vivo", librosString);
     }
 }

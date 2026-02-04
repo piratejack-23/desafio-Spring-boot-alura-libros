@@ -15,8 +15,17 @@ public class Libro {
     private Long id;
     @Column(unique = true)
     private String titulo;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "libro_idiomas", joinColumns = @JoinColumn(name = "libro_id"))
+    @Column(name = "idiomas")
     private List<String> idiomas;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "libro_tematicas", joinColumns = @JoinColumn(name = "libro_id"))
+    @Column(name = "tematicas")
     private List<String> tematicas;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "libro_categorias", joinColumns = @JoinColumn(name = "libro_id"))
+    @Column(name = "categorias")
     private List<String> categorias;
     private Integer numeroDescargas;
     @ManyToOne
@@ -92,13 +101,19 @@ public class Libro {
 
     @Override
     public String toString() {
-        return
-                "id=" + id +
-                ", titulo='" + titulo +
-                ", idiomas=" + idiomas +
-                ", tematicas=" + tematicas +
-                ", categorias=" + categorias +
-                ", numeroDescargas=" + numeroDescargas +
-                ", autor=" + autor ;
+        String autorString = "  • " + autor.getNombre() + "\n";
+
+        return String.format("""
+        Libro #%d
+        ━━━━━━━━━━━━━━━━━━━━━━
+        Título: %s
+        Idiomas: %s
+        Temáticas: %s
+        Categorías: %s
+        Descargas: %d
+        
+        %s
+        
+        """, id, titulo, idiomas, tematicas, categorias, numeroDescargas,autorString);
     }
 }
