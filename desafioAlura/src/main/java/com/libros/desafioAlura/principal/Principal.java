@@ -9,6 +9,9 @@ import com.libros.desafioAlura.repository.AutorRepository;
 import com.libros.desafioAlura.repository.LibroRepository;
 import com.libros.desafioAlura.service.ConsumoAPI;
 import com.libros.desafioAlura.service.ConvierteDatos;
+
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 
 public class Principal {
@@ -19,6 +22,7 @@ public class Principal {
     private AutorRepository repositoryautor;
     private ConvierteDatos conversor =  new ConvierteDatos();
     private String json;
+    List<Libro> libros;
 
     public Principal(LibroRepository repositorylibro, AutorRepository repositoryautor) {
         this.repositorylibro =repositorylibro;
@@ -28,11 +32,10 @@ public class Principal {
     public void muestraElMenu() {
         var opcion = -1;
         while (opcion != 0) {
-            var menu = """
-                    1 - Buscar Libro web por nombre
-                    2 - Buscar episodios
-                    3 - Mostrar series buscadas
-                    4 -
+            var menu = """                    1 - Buscar Libro web por nombre y guardarlo
+                    2 - Listar libros guardados
+                    3 - Listar autores guardados
+                    4 - 
                                   
                     0 - Salir
                     """;
@@ -45,7 +48,7 @@ public class Principal {
                     obtenerLibroWeb();
                     break;
                 case 2:
-
+                    obtenerLibrosGuardados();
                     break;
                 case 3:
 
@@ -62,6 +65,7 @@ public class Principal {
         }
 
     }
+
 
 
     private void obtenerLibroWeb() {
@@ -83,13 +87,23 @@ public class Principal {
                     Autor nuevoAutor = new Autor(autorDTO);
                     return repositoryautor.save(nuevoAutor);
                 });
-        Libro libro = repositorylibro.findByTitulo(libroDTO.titulo()).orElseGet(() -> {
+
+        if(repositorylibro.findByTitulo(libroDTO.titulo()).isPresent()){
+            System.out.println("El libro ya fue guardado");
+        }else {
             Libro nuevoLibro = new Libro(libroDTO);
             nuevoLibro.setAutor(autor);
-            return repositorylibro.save(nuevoLibro);
-        });
-
+            repositorylibro.save(nuevoLibro);
+        }
         System.out.println("libro guardado correctamente");
+
+    }
+
+    private void obtenerLibrosGuardados() {
+
+        libros = repositorylibro.findAll();
+
+        libros.forEach(System.out::println);
 
     }
 
